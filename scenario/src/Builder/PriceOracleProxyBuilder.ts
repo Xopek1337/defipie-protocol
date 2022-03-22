@@ -15,38 +15,30 @@ export interface PriceOracleProxyData {
   contract?: PriceOracleProxy,
   description: string,
   address?: string,
-  pETH: string,
-  pUSDC: string,
-  pDAI: string
+  Registry: string,
+  priceFeed: string,
 }
 
 export async function buildPriceOracleProxy(world: World, from: string, event: Event): Promise<{world: World, priceOracleProxy: PriceOracleProxy, invokation: Invokation<PriceOracleProxy>}> {
   const fetchers = [
-    new Fetcher<{guardian: AddressV, priceOracle: AddressV, pETH: AddressV, pUSDC: AddressV, pSAI: AddressV, pDAI: AddressV, pUSDT: AddressV}, PriceOracleProxyData>(`
+    new Fetcher<{PriceOracle: AddressV, Registry: AddressV, priceFeed: AddressV}, PriceOracleProxyData>(`
         #### Price Oracle Proxy
 
-        * "Deploy <Guardian:Address> <PriceOracle:Address> <pETH:Address> <pUSDC:Address> <pSAI:Address> <pDAI:Address> <pUSDT:Address>" - The Price Oracle which proxies to a backing oracle
+        * "Deploy <PriceOracle:Address> <Registry:Address> <pUSDC:Address>" - The Price Oracle which proxies to a backing oracle
         * E.g. "PriceOracleProxy Deploy Admin (PriceOracle Address) pETH pUSDC pSAI pDAI pUSDT"
       `,
       "PriceOracleProxy",
       [
-        new Arg("guardian", getAddressV),
-        new Arg("priceOracle", getAddressV),
-        new Arg("pETH", getAddressV),
-        new Arg("pUSDC", getAddressV),
-        new Arg("pSAI", getAddressV),
-        new Arg("pDAI", getAddressV),
-        new Arg("pUSDT", getAddressV)
+        new Arg("PriceOracle", getAddressV),
+        new Arg("Registry", getAddressV),
+        new Arg("priceFeed", getAddressV),
       ],
-      async (world, {guardian, priceOracle, pETH, pUSDC, pSAI, pDAI, pUSDT}) => {
+      async (world, {PriceOracle, Registry, priceFeed}) => {
         return {
-          invokation: await PriceOracleProxyContract.deploy<PriceOracleProxy>(world, from, [guardian.val, priceOracle.val, pETH.val, pUSDC.val, pSAI.val, pDAI.val, pUSDT.val]),
+          invokation: await PriceOracleProxyContract.deploy<PriceOracleProxy>(world, from, [PriceOracle.val, Registry.val, priceFeed.val]),
           description: "Price Oracle Proxy",
-          pETH: pETH.val,
-          pUSDC: pUSDC.val,
-          pSAI: pSAI.val,
-          pDAI: pDAI.val,
-          pUSDT: pUSDT.val
+          Registry: Registry.val,
+          priceFeed: priceFeed.val
         };
       },
       {catchall: true}
