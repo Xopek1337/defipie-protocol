@@ -26,7 +26,7 @@ contract PriceOracleProxy is PriceOracleProxyStorage, OracleErrorReporter {
         implementation = implementation_;
         registry = registry_;
 
-        delegateTo(implementation, abi.encodeWithSignature("initialize(address)", ethPriceFeed_));
+        // delegateTo(implementation, abi.encodeWithSignature("initialize(address)", ethPriceFeed_));
     }
 
     function _setOracleImplementation(address newImplementation) external returns(uint256) {

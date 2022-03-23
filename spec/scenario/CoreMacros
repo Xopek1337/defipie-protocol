@@ -31,7 +31,7 @@ Macro NewController price=1.0 closeFactor=0.1 feeFactorMax=0.1 maxAssets=20
     PriceOracle Deploy Fixed price
     ControllerImpl Deploy ScenarioG1 ScenControllerG1
     Unitroller SetPendingImpl ScenControllerG1
-    PriceOracleProxy Deploy Admin (PriceOracle Address) (Address Zero) (Address Zero) (Address Zero) (Address Zero) (Address Zero) -- if listing pEther use ListedEtherToken to replace proxy
+    PriceOracleProxy Deploy (PriceOracle Address) (RegistryProxy Address) (PriceOracle Address) -- if listing pEther use ListedEtherToken to replace proxy
     ControllerImpl ScenControllerG1 Become
     Controller SetPieRate 1e18
     RegistryProxy SetPriceOracle (PriceOracleProxy Address)

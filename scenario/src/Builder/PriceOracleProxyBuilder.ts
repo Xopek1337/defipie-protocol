@@ -15,14 +15,14 @@ export interface PriceOracleProxyData {
   contract?: PriceOracleProxy,
   description: string,
   address?: string,
-  pETH: string,
-  pUSDC: string,
-  pDAI: string
+  priceOracle: string,
+  registryProxy: string,
+  ETHUSDPriceFeed: string
 }
 
 export async function buildPriceOracleProxy(world: World, from: string, event: Event): Promise<{world: World, priceOracleProxy: PriceOracleProxy, invokation: Invokation<PriceOracleProxy>}> {
   const fetchers = [
-    new Fetcher<{guardian: AddressV, priceOracle: AddressV, pETH: AddressV, pUSDC: AddressV, pSAI: AddressV, pDAI: AddressV, pUSDT: AddressV}, PriceOracleProxyData>(`
+    new Fetcher<{priceOracle: AddressV, registryProxy: AddressV, ETHUSDPriceFeed: AddressV}, PriceOracleProxyData>(`
         #### Price Oracle Proxy
 
         * "Deploy <Guardian:Address> <PriceOracle:Address> <pETH:Address> <pUSDC:Address> <pSAI:Address> <pDAI:Address> <pUSDT:Address>" - The Price Oracle which proxies to a backing oracle
@@ -30,23 +30,17 @@ export async function buildPriceOracleProxy(world: World, from: string, event: E
       `,
       "PriceOracleProxy",
       [
-        new Arg("guardian", getAddressV),
         new Arg("priceOracle", getAddressV),
-        new Arg("pETH", getAddressV),
-        new Arg("pUSDC", getAddressV),
-        new Arg("pSAI", getAddressV),
-        new Arg("pDAI", getAddressV),
-        new Arg("pUSDT", getAddressV)
+        new Arg("registryProxy", getAddressV),
+        new Arg("ETHUSDPriceFeed", getAddressV)
       ],
-      async (world, {guardian, priceOracle, pETH, pUSDC, pSAI, pDAI, pUSDT}) => {
+      async (world, {priceOracle, registryProxy, ETHUSDPriceFeed}) => {
         return {
-          invokation: await PriceOracleProxyContract.deploy<PriceOracleProxy>(world, from, [guardian.val, priceOracle.val, pETH.val, pUSDC.val, pSAI.val, pDAI.val, pUSDT.val]),
+          invokation: await PriceOracleProxyContract.deploy<PriceOracleProxy>(world, from, [priceOracle.val, registryProxy.val, ETHUSDPriceFeed.val]),
           description: "Price Oracle Proxy",
-          pETH: pETH.val,
-          pUSDC: pUSDC.val,
-          pSAI: pSAI.val,
-          pDAI: pDAI.val,
-          pUSDT: pUSDT.val
+          priceOracle: priceOracle.val,
+          registryProxy: registryProxy.val,
+          ETHUSDPriceFeed: ETHUSDPriceFeed.val
         };
       },
       {catchall: true}
