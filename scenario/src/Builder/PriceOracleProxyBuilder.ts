@@ -8,7 +8,7 @@ import {getContract} from '../Contract';
 import {getAddressV} from '../CoreValue';
 import {AddressV} from '../Value';
 
-const PriceOracleProxyContract = getContract("PriceOracleProxy");
+const PriceOracleProxyContract = getContract("PriceOracleProxyHarness");
 
 export interface PriceOracleProxyData {
   invokation?: Invokation<PriceOracleProxy>,

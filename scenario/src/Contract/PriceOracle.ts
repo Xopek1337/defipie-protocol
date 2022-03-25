@@ -6,7 +6,7 @@ interface PriceOracleMethods {
   initialize(address: string): Sendable<void>
   assetPrices(asset: string): Callable<number>
   setUnderlyingPrice(pToken: string, amount: encodedNumber): Sendable<number>
-  setDirectPrice(address: string, amount: encodedNumber): Sendable<number>
+  setDirectPrice(asset: string, amount: encodedNumber): Sendable<number>
   getUnderlyingPrice(asset: string): Callable<number>
   
   // Anchor Price Oracle

@@ -44,7 +44,7 @@ export function priceOracleFetchers() {
       "Price",
       [
         new Arg("priceOracle", getPriceOracle, {implicit: true}),
-        new Arg("asset", getAddressV,)
+        new Arg("asset", getAddressV)
       ],
       (world, {priceOracle, asset}) => getPrice(world, priceOracle, asset.val)
     )

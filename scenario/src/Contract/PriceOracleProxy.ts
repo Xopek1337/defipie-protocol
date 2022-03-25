@@ -5,7 +5,7 @@ import {encodedNumber} from '../Encoding';
 interface PriceOracleProxyMethods {
   getUnderlyingPrice(asset: string): Callable<number>
   implementaion(): Callable<string>;
-  setSaiPrice(amount: encodedNumber): Sendable<number>
+  setDirectPrice(asset: string, amount: encodedNumber): Sendable<number>
 }
 
 export interface PriceOracleProxy extends Contract {

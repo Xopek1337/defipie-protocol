@@ -4,11 +4,13 @@ import {PriceOracleProxy} from '../Contract/PriceOracleProxy';
 import {buildPriceOracleProxy} from '../Builder/PriceOracleProxyBuilder';
 import {invoke} from '../Invokation';
 import {
+  getAddressV,
   getEventV,
   getExpNumberV,
   getStringV
 } from '../CoreValue';
 import {
+  AddressV,
   EventV,
   NumberV,
   StringV
@@ -42,6 +44,14 @@ async function verifyPriceOracleProxy(world: World, priceOracleProxy: PriceOracl
   return world;
 }
 
+async function setDirectPrice(world: World, from: string, priceOracleProxy: PriceOracleProxy, asset: string, amount: NumberV): Promise<World> {
+  return addAction(
+    world,
+    `Set price oracle price for ${asset} to ${amount.show()}`,
+    await invoke(world, priceOracleProxy.methods.setDirectPrice(asset, amount.encode()), from)
+  );
+}
+
 export function priceOracleProxyCommands() {
   return [
     new Command<{params: EventV}>(`
@@ -55,6 +65,21 @@ export function priceOracleProxyCommands() {
         new Arg("params", getEventV, {variadic: true})
       ],
       (world, from, {params}) => genPriceOracleProxy(world, from, params.val)
+    ),
+
+    new Command<{priceOracleProxy: PriceOracleProxy, asset: AddressV, amount: NumberV}>(`
+        #### SetDirectPrice
+
+        * "SetDirectPrice <Address> <Amount>" - Sets the per-ether price for the given pToken
+          * E.g. "PriceOracle SetDirectPrice (Address Zero) 1.0"
+      `,
+      "SetDirectPrice",
+      [
+        new Arg("priceOracleProxy", getPriceOracleProxy, {implicit: true}),
+        new Arg("asset", getAddressV),
+        new Arg("amount", getExpNumberV)
+      ],
+      (world, from, {priceOracleProxy, asset, amount}) => setDirectPrice(world, from, priceOracleProxy, asset.val, amount)
     ),
 
     new View<{priceOracleProxy: PriceOracleProxy, apiKey: StringV, contractName: StringV}>(`

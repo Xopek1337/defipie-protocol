@@ -1,7 +1,7 @@
 Macro SetupPriceOracleProxy
     NewRegistryProxy
     Unitroller Deploy RegistryProxy
-    PriceOracle Deploy (Fixed 20.0)
+    PriceOracle Deploy Simple
     -- Update to G1
     ControllerImpl Deploy ScenarioG1 ScenControllerG1
     Unitroller SetPendingImpl ScenControllerG1
@@ -50,7 +50,8 @@ Test "sai price is dai price until set"
 
 Test "gets tether and usdc prices"
     SetupPriceOracleProxy
-    PriceOracle SetDirectPrice (Address 0x0000000000000000000000000000000000000001) 5740564708.572881
+    PriceOracleProxy SetDirectPrice pUSDC 5740564708.572881
+    PriceOracleProxy SetDirectPrice pUSDT 5740564708.572881
     -- scaled to 1e30 bc both tokens have 6 decimals
-    Assert Equal (PriceOracleProxy Price pUSDT) 5740564708572881000000000000
     Assert Equal (PriceOracleProxy Price pUSDC) 5740564708572881000000000000
+    Assert Equal (PriceOracleProxy Price pUSDT) 5740564708572881000000000000
