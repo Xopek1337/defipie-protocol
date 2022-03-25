@@ -11,12 +11,16 @@ import {
 import {Arg, Fetcher, getFetcherValue} from '../Command';
 import {getPriceOracle} from '../ContractLookup';
 
-async function getPrice(world: World, priceOracle: PriceOracle, asset: string): Promise<NumberV> {
-  return new NumberV(await priceOracle.methods.assetPrices(asset).call());
-}
+//async function getPrice(world: World, priceOracle: PriceOracle, asset: string): Promise<NumberV> {
+ // return new NumberV(await priceOracle.methods.assetPrices(asset).call());
+//}
 
 export async function getPriceOracleAddress(world: World, priceOracle: PriceOracle): Promise<AddressV> {
   return new AddressV(priceOracle._address);
+}
+
+async function getPrice(world: World, priceOracle: PriceOracle, asset: string): Promise<NumberV> {
+  return new NumberV(await priceOracle.methods.getUnderlyingPrice(asset).call());
 }
 
 export function priceOracleFetchers() {

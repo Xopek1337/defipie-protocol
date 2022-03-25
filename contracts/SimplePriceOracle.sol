@@ -9,6 +9,9 @@ contract SimplePriceOracle is PriceOracleCore {
     mapping(address => uint) prices;
     event PricePosted(address asset, uint previousPriceMantissa, uint requestedPriceMantissa, uint newPriceMantissa);
 
+    function initialize(address ETHUSDPriceFeed_) public {
+    }
+    
     function getUnderlyingPrice(address pToken) public view override returns (uint) {
         if (compareStrings(PErc20(pToken).symbol(), "pETH")) {
             return 1e18;

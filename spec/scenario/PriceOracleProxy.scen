@@ -5,7 +5,7 @@ Macro SetupPriceOracleProxy
     -- Update to G1
     ControllerImpl Deploy ScenarioG1 ScenControllerG1
     Unitroller SetPendingImpl ScenControllerG1
-    PriceOracleProxy Deploy Admin (PriceOracle Address) (Address Zero) (Address Zero) (Address Zero) (Address Zero) (Address Zero)
+    PriceOracleProxy Deploy (PriceOracle Address) (RegistryProxy Address) (RegistryProxy Address)
     ControllerImpl ScenControllerG1 Become
     Controller SetPieRate 1e18
     RegistryProxy SetPriceOracle (PriceOracleProxy Address)
@@ -33,7 +33,7 @@ Macro SetupPriceOracleProxy
     Controller SupportMarket pSAI
     Controller SupportMarket pDAI
     Controller SupportMarket pUSDT
-    PriceOracleProxy Deploy Admin (PriceOracle Address) (Address pETH) (Address pUSDC) (Address pSAI) (Address pDAI) (Address pUSDT)
+    PriceOracleProxy Deploy (PriceOracle Address) (RegistryProxy Address) (RegistryProxy Address)
     RegistryProxy SetPriceOracle (PriceOracleProxy Address)
 
 Test "uses address(2) for dai and address(1) for usdc"
@@ -47,8 +47,6 @@ Test "sai price is dai price until set"
     SetupPriceOracleProxy
     PriceOracle SetDirectPrice (Address 0x0000000000000000000000000000000000000002) 0.005842307360923634
     Assert Equal (PriceOracleProxy Price pSAI) 5842307360923634
-    PriceOracleProxy SetSaiPrice 0.006842307360923634
-    Assert Equal (PriceOracleProxy Price pSAI) 6842307360923634
 
 Test "gets tether and usdc prices"
     SetupPriceOracleProxy

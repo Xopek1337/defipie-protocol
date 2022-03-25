@@ -54,7 +54,7 @@ contract PriceOracle is PriceOracleProxyStorage, PriceOracleCore, OracleErrorRep
             ETHUSDPriceFeed_ != address(0),
             "Oracle: address is not correct"
         );
-
+        
         ETHUSDPriceFeed = ETHUSDPriceFeed_;
     }
 
