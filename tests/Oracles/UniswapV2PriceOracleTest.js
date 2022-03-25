@@ -1765,7 +1765,8 @@ describe('UniswapV2PriceOracle', () => {
             ]);
 
             // update asset (search new pair and set pair dai/new asset)
-            await send(uniswapV2PriceOracle, 'update', [newAsset._address])
+            await send(uniswapV2PriceOracle, 'update', [newAsset._address]);
+
 
             // remove liquidity from #2 pair
             await send(newMockUniswapV2Pool2, 'setData', [
@@ -1779,6 +1780,7 @@ describe('UniswapV2PriceOracle', () => {
 
             // update asset (search new pair and set pair usdt/new asset)
             await send(uniswapV2PriceOracle, 'update', [newAsset._address])
+
 
             // add liquidity to #1 and #2 pair
             await send(newMockUniswapV2Pool2, 'setData', [

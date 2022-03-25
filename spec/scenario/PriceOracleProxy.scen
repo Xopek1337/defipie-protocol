@@ -1,7 +1,7 @@
 Macro SetupPriceOracleProxy
     NewRegistryProxy
     Unitroller Deploy RegistryProxy
-    PriceOracle Deploy Simple
+    PriceOracle Deploy (Fixed 20.0)
     -- Update to G1
     ControllerImpl Deploy ScenarioG1 ScenControllerG1
     Unitroller SetPendingImpl ScenControllerG1
@@ -19,7 +19,7 @@ Macro SetupPriceOracleProxy
     ControllerImpl Deploy StandardG3 ControllerG3
     Unitroller SetPendingImpl ControllerG3
     ControllerImpl ControllerG3 Become
-    -- Update to G*
+    -- Update to G*Simple
     ControllerImpl Deploy Scenario ScenController
     Unitroller SetPendingImpl ScenController
     ControllerImpl ScenController Become

@@ -152,7 +152,7 @@ describe('Governor#propose/5', () => {
       await mineBlock();
       let nextProposalId = await gov.methods['propose'](targets, values, signatures, callDatas, "yoot").call({ from: accounts[3] });
       let startBlock = 53 + delay;
-
+      
       expect(
         await send(gov, 'propose', [targets, values, signatures, callDatas, "second proposal"], { from: accounts[3] })
       ).toHaveLog("ProposalCreated", {

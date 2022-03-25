@@ -15,32 +15,32 @@ export interface PriceOracleProxyData {
   contract?: PriceOracleProxy,
   description: string,
   address?: string,
-  priceOracle: string,
-  registryProxy: string,
-  ETHUSDPriceFeed: string
+  PriceOracle: string,
+  Registry: string,
+  priceFeed: string,
 }
 
 export async function buildPriceOracleProxy(world: World, from: string, event: Event): Promise<{world: World, priceOracleProxy: PriceOracleProxy, invokation: Invokation<PriceOracleProxy>}> {
   const fetchers = [
-    new Fetcher<{priceOracle: AddressV, registryProxy: AddressV, ETHUSDPriceFeed: AddressV}, PriceOracleProxyData>(`
+    new Fetcher<{PriceOracle: AddressV, Registry: AddressV, priceFeed: AddressV}, PriceOracleProxyData>(`
         #### Price Oracle Proxy
 
-        * "Deploy <Guardian:Address> <PriceOracle:Address> <pETH:Address> <pUSDC:Address> <pSAI:Address> <pDAI:Address> <pUSDT:Address>" - The Price Oracle which proxies to a backing oracle
+        * "Deploy <PriceOracle:Address> <Registry:Address> <pUSDC:Address>" - The Price Oracle which proxies to a backing oracle
         * E.g. "PriceOracleProxy Deploy Admin (PriceOracle Address) pETH pUSDC pSAI pDAI pUSDT"
       `,
       "PriceOracleProxy",
       [
-        new Arg("priceOracle", getAddressV),
-        new Arg("registryProxy", getAddressV),
-        new Arg("ETHUSDPriceFeed", getAddressV)
+        new Arg("PriceOracle", getAddressV),
+        new Arg("Registry", getAddressV),
+        new Arg("priceFeed", getAddressV),
       ],
-      async (world, {priceOracle, registryProxy, ETHUSDPriceFeed}) => {
+      async (world, {PriceOracle, Registry, priceFeed}) => {
         return {
-          invokation: await PriceOracleProxyContract.deploy<PriceOracleProxy>(world, from, [priceOracle.val, registryProxy.val, ETHUSDPriceFeed.val]),
+          invokation: await PriceOracleProxyContract.deploy<PriceOracleProxy>(world, from, [PriceOracle.val, Registry.val, priceFeed.val]),
           description: "Price Oracle Proxy",
-          priceOracle: priceOracle.val,
-          registryProxy: registryProxy.val,
-          ETHUSDPriceFeed: ETHUSDPriceFeed.val
+          PriceOracle: PriceOracle.val,
+          Registry: Registry.val,
+          priceFeed: priceFeed.val
         };
       },
       {catchall: true}
