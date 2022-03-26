@@ -183,7 +183,7 @@ Test "Reduce reserves for PEther from Timelock and send reserves to external add
 Test "Set Pending Controller implementation on Unitroller from Timelock"
     NewRegistryProxy
     Unitroller Deploy RegistryProxy
-    PriceOracle Deploy Implementation
+    PriceOracle Deploy Simple
     ControllerImpl Deploy ScenarioG1 ScenControllerG1
     Unitroller SetPendingImpl ScenControllerG1
     Assert Equal (Unitroller PendingImplementation) (ControllerImpl ScenControllerG1 Address)

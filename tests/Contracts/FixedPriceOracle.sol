@@ -10,6 +10,9 @@ contract FixedPriceOracle is PriceOracleCore {
         price = _price;
     }
 
+    function initialize(address ETHUSDPriceFeed_) public {
+    }
+
     function getUnderlyingPrice(address) public view override returns (uint) {
         return price;
     }

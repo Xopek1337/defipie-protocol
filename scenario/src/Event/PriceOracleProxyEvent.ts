@@ -47,13 +47,14 @@ async function verifyPriceOracleProxy(world: World, priceOracleProxy: PriceOracl
   return world;
 }
 
-/*async function setDirectPrice(world: World, from: string, priceOracleProxy: PriceOracleProxy, asset: string, amount: NumberV): Promise<World> {
+async function setPrice(world: World, from: string, priceOracleProxy: PriceOracleProxy, pToken: string, amount: NumberV): Promise<World> {
   return addAction(
     world,
-    `Set price oracle price for ${asset} to ${amount.show()}`,
-    await invoke(world, priceOracleProxy.methods.setDirectPrice(asset, amount.encode()), from)
+    `Set price oracle price for ${pToken} to ${amount.show()}`,
+    await invoke(world, priceOracleProxy.methods.setUnderlyingPrice(pToken, amount.encode()), from)
   );
-}*/
+}
+
 async function setDirectPrice(world: World, from: string, priceOracleProxy: PriceOracleProxy, asset: string, amount: NumberV): Promise<World> {
   let invokation = await invoke(world, priceOracleProxy.methods.setDirectPrice(asset, amount.encode()), from);
 
@@ -94,6 +95,21 @@ export function priceOracleProxyCommands() {
         new Arg("amount", getExpNumberV)
       ],
       (world, from, {priceOracleProxy, asset, amount}) => setDirectPrice(world, from, priceOracleProxy, asset.val, amount)
+    ),
+
+    new Command<{priceOracleProxy: PriceOracleProxy, pToken: AddressV, amount: NumberV}>(`
+        #### SetPrice
+
+        * "SetPrice <PToken> <Amount>" - Sets the per-ether price for the given pToken
+          * E.g. "PriceOracle SetPrice pZRX 1.0"
+      `,
+      "SetPrice",
+      [
+        new Arg("priceOracleProxy", getPriceOracleProxy, {implicit: true}),
+        new Arg("pToken", getAddressV),
+        new Arg("amount", getExpNumberV)
+      ],
+      (world, from, {priceOracleProxy, pToken, amount}) => setPrice(world, from, priceOracleProxy, pToken.val, amount)
     ),
 
     new View<{priceOracleProxy: PriceOracleProxy, apiKey: StringV, contractName: StringV}>(`

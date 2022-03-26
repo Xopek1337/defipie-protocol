@@ -9,7 +9,7 @@ Macro AllowFailures
 Macro PricedController closeFactor=0.1 feeFactorMax=0.1 maxAssets=20
     NewRegistryProxy
     Unitroller Deploy RegistryProxy
-    PriceOracle Deploy Implementation
+    PriceOracle Deploy Simple
     ControllerImpl Deploy ScenarioG1 ScenControllerG1
     Unitroller SetPendingImpl ScenControllerG1
     PriceOracleProxy Deploy (PriceOracle Address) (RegistryProxy Address) (RegistryProxy Address) -- if listing pEther use ListedEtherToken to replace proxy
@@ -28,7 +28,7 @@ Macro NewController price=1.0 closeFactor=0.1 feeFactorMax=0.1 maxAssets=20
     --g1
     NewRegistryProxy
     Unitroller Deploy RegistryProxy
-    PriceOracle Deploy Implementation
+    PriceOracle Deploy Fixed price
     ControllerImpl Deploy ScenarioG1 ScenControllerG1
     Unitroller SetPendingImpl ScenControllerG1
     PriceOracleProxy Deploy (PriceOracle Address) (RegistryProxy Address) (RegistryProxy Address) -- if listing pEther use ListedEtherToken to replace proxy
@@ -117,7 +117,7 @@ Macro ListedPPIEToken pToken underlying borrowRate=0.000005 initialExchangeRate=
     Controller SupportMarket pToken
 
 Macro SetPriceCF pToken price collateralFactor
-    PriceOracle SetPrice pToken price
+    PriceOracleProxy SetPrice pToken price
     Controller SetCollateralFactor pToken collateralFactor
 
 Macro Give user amount erc20
