@@ -1,5 +1,5 @@
 import {Event} from '../Event';
-import {addAction, World} from '../World';
+import {addAction, World, describeUser} from '../World';
 import {PriceOracleProxy} from '../Contract/PriceOracleProxy';
 import {buildPriceOracleProxy} from '../Builder/PriceOracleProxyBuilder';
 import {invoke} from '../Invokation';
@@ -7,17 +7,20 @@ import {
   getAddressV,
   getEventV,
   getExpNumberV,
+  getNumberV,
   getStringV
 } from '../CoreValue';
 import {
   AddressV,
   EventV,
   NumberV,
+  ExpNumberV,
   StringV
 } from '../Value';
 import {Arg, Command, processCommandEvent, View} from '../Command';
 import {getPriceOracleProxy} from '../ContractLookup';
 import {verify} from '../Verify';
+import { encodedNumber } from '../Encoding';
 
 async function genPriceOracleProxy(world: World, from: string, params: Event): Promise<World> {
   let priceOracleProxy;
@@ -44,12 +47,23 @@ async function verifyPriceOracleProxy(world: World, priceOracleProxy: PriceOracl
   return world;
 }
 
-async function setDirectPrice(world: World, from: string, priceOracleProxy: PriceOracleProxy, asset: string, amount: NumberV): Promise<World> {
+/*async function setDirectPrice(world: World, from: string, priceOracleProxy: PriceOracleProxy, asset: string, amount: NumberV): Promise<World> {
   return addAction(
     world,
     `Set price oracle price for ${asset} to ${amount.show()}`,
     await invoke(world, priceOracleProxy.methods.setDirectPrice(asset, amount.encode()), from)
   );
+}*/
+async function setDirectPrice(world: World, from: string, priceOracleProxy: PriceOracleProxy, asset: string, amount: NumberV): Promise<World> {
+  let invokation = await invoke(world, priceOracleProxy.methods.setDirectPrice(asset, amount.encode()), from);
+
+  world = addAction(
+      world,
+      `Called add PPIE address ${asset} to ${amount.show()} as ${describeUser(world, from)}`,
+      invokation
+  );
+
+  return world;
 }
 
 export function priceOracleProxyCommands() {

@@ -19,8 +19,8 @@ export async function getV1PriceOracle(world: World, priceOracleProxy: PriceOrac
   return new AddressV(await priceOracleProxy.methods.implementaion().call());
 }
 
-async function getPrice(world: World, priceOracleProxy: PriceOracleProxy, asset: string): Promise<NumberV> {
-  return new NumberV(await priceOracleProxy.methods.getUnderlyingPrice(asset).call());
+async function getPrice(world: World, priceOracleProxy: PriceOracleProxy, pToken: string): Promise<NumberV> {
+  return new NumberV(await priceOracleProxy.methods.getUnderlyingPrice(pToken).call());
 }
 
 export function priceOracleProxyFetchers() {
@@ -47,7 +47,7 @@ export function priceOracleProxyFetchers() {
       ],
       (world, {priceOracleProxy}) => getPriceOracleProxyAddress(world, priceOracleProxy)
     ),
-    new Fetcher<{priceOracleProxy: PriceOracleProxy, asset: AddressV}, NumberV>(`
+    new Fetcher<{priceOracleProxy: PriceOracleProxy, pToken: AddressV}, NumberV>(`
         #### Price
 
         * "Price asset:<Address>" - Gets the price of the given asset
@@ -55,9 +55,9 @@ export function priceOracleProxyFetchers() {
       "Price",
       [
         new Arg("priceOracleProxy", getPriceOracleProxy, {implicit: true}),
-        new Arg("asset", getAddressV)
+        new Arg("pToken", getAddressV)
       ],
-      (world, {priceOracleProxy, asset}) => getPrice(world, priceOracleProxy, asset.val)
+      (world, {priceOracleProxy, pToken}) => getPrice(world, priceOracleProxy, pToken.val)
     )
   ];
 }

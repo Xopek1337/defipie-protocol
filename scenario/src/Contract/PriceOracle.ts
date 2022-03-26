@@ -7,7 +7,7 @@ interface PriceOracleMethods {
   assetPrices(asset: string): Callable<number>
   setUnderlyingPrice(pToken: string, amount: encodedNumber): Sendable<number>
   setDirectPrice(asset: string, amount: encodedNumber): Sendable<number>
-  getUnderlyingPrice(asset: string): Callable<number>
+  getUnderlyingPrice(pToken: string): Callable<number>
   
   // Anchor Price Oracle
   getPrice(asset: string): Callable<number>
